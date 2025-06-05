@@ -1,10 +1,9 @@
 #!/bin/bash
+echo "Load Average" >> /var/tmp/health_log
+uptime | awk -F'load average:' '{print $2}' >> /var/tmp/health_log
 
-echo "Load Average"
-uptime
+echo "Memory Availability" >> /var/tmp/health_log
+free -h >> /var/tmp/health_log
 
-echo "Memory Availability"
-free -h
-
-echo "SSH is running"
-systemctl status ssh
+echo "SSH is running" >> /var/tmp/health_log
+systemctl status ssh >> /var/tmp/health_log
