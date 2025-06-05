@@ -2,7 +2,7 @@
 
 LOGFILE="/var/tmp/health_log.log"
 
-echo "--- Health Check Report ----" >> "$LOGFILE"
+echo " -------Health Report-------- " >> "$LOGFILE"
 
 echo "Load Average" >> "$LOGFILE"
 uptime | awk -F'load average:' '{print $2}' >> "$LOGFILE"
