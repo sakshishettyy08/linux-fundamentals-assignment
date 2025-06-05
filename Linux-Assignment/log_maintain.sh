@@ -7,18 +7,9 @@ find /opt/logmanager -type f -mtime +7 -exec tar -czvf /opt/archive_logs/log_arc
 echo "Delete"
 find /opt/logmanager -type f -mtime +30 -exec rm -f {} \;
 
+echo "Warning for the usage above 80%"
 
-
-LOG_FILE="/var/tmp/log_alerts.log"
-THRESHOLD=80
-
-# Get disk usage and loop through each line
-df -hP | awk 'NR>1' | while read -r line; do
-    USAGE=$(echo $line | awk '{print $5}' | tr -d '%')
-    PARTITION=$(echo $line | awk '{print $6}')
-    
-    if [ "$USAGE" -gt "$THRESHOLD" ]; then
-        echo "$(date): WARNING - Partition $PARTITION is ${USAGE}% full" >> "$LOG_FILE"
-    fi
-done
+ df -h | awk 'NR>1 {gsub("%","",$5); if ($5 > 80) print $1, $5}' | while read -r partition usage; do
+ echo "$(date): WARNING: Partition $partition is at ${usage}% disk usage." >> /var/tmp/disk_usage_warnings.log
+ done
 
